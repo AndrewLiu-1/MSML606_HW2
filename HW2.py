@@ -159,8 +159,57 @@ class Stack:
     # Use your own stack implementation to solve problem 3
 
     def __init__(self):
-        # TODO: initialize the stack
-        pass
+        # Initialize the underlying list for storage
+        self._data = []
+        self._top = -1
+
+    def push(self, item):
+        """
+        Pushes an item onto the top of the stack.
+        Time Complexity: O(1) amortized
+        """
+        self._top += 1
+        # Use append to add element
+        if self._top < len(self._data):
+            self._data[self._top] = item
+        else:
+            self._data.append(item)
+
+    def pop(self):
+        """
+        Remove and return the item at the top of the stack.
+        Raises IndexError if stack is empty.
+        Time Complexity: O(1)
+        """
+        if self.is_empty():
+            raise IndexError("Stack is empty - cannot pop")
+        item = self._data[self._top]
+        self._top -= 1
+        return item
+
+    def peek(self):
+        """
+        Return the item at the top of the stack without removing it.
+        Raises IndexError if stack is empty.
+        Time Complexity: O(1)
+        """
+        if self.is_empty():
+            raise IndexError("Stack is empty - cannot peek")
+        return self._data[self._top]
+
+    def is_empty(self):
+        """
+        Check if the stack is empty.
+        Time Complexity: O(1)
+        """
+        return self._top == -1
+
+    def size(self):
+        """
+        Return the number of elements in the stack.
+        Time Complexity: O(1)
+        """
+        return self._top + 1
 
     # Problem 3: Write code to evaluate a postfix expression using stack and return the integer value
     # Use stack which you implemented above for this problem
