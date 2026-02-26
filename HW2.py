@@ -24,7 +24,44 @@ class HomeWork2:
     #     3   4
 
     def constructBinaryTree(self, input) -> TreeNode:
-        pass
+        # Edge case -> empty input
+        if not input or len(input) == 0:
+            return None
+        
+        # Define the set of basic support operators
+        operators = {'+', '-', '*', '/'}
+        
+        # Stack that holds the TreeNode references
+        stack = []
+        
+        for token in input:
+            if token in operators:
+                # Token is an operator: pop two operands and create subtree
+                # Edge case: less than 2 nodes on stack
+                if len(stack) < 2:
+                    raise ValueError(f"Malformed expression: insufficient operands for operator '{token}'")
+                
+                # Pop right child first (stack is LIFO), then left child
+                right_node = stack.pop()
+                left_node = stack.pop()
+                
+                # Create new operator node with children
+                operator_node = TreeNode(val=token, left=left_node, right=right_node)
+                
+                # Push the subtree root back onto stack
+                stack.append(operator_node)
+            else:
+                # Token is an operand: create leaf node
+                # We keep the value as string to match output format
+                operand_node = TreeNode(val=token)
+                stack.append(operand_node)
+        
+        # Edge case: too many operands
+        if len(stack) != 1:
+            raise ValueError(f"Malformed expression: {len(stack)} items left on stack (expected 1)")
+        
+        # Returns the root of the constructed tree
+        return stack.pop()
 
 
 
