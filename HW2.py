@@ -1,3 +1,4 @@
+# Andrew Liu - MSML606 HW2
 import csv
 class TreeNode:
     def __init__(self, val=0, left=None, right=None):
@@ -224,9 +225,62 @@ class Stack:
 
     # DO NOT USE EVAL function for evaluating the expression
 
-    def evaluatePostfix(exp: str) -> int:
-        # TODO: implement this using your Stack class
-        pass
+    def evaluatePostfix(self, exp: str) -> int:
+        # Edge case: empty expression
+        if not exp or exp.strip() == "":
+            raise ValueError("Empty expression")
+        
+        # Define valid operators
+        operators = {'+', '-', '*', '/'}
+        
+        # Split expression to get tokens
+        tokens = exp.split()
+        
+        # Edge case: no tokens
+        if len(tokens) == 0:
+            raise ValueError("Empty expression after parsing")
+        
+        for token in tokens:
+            if token in operators:
+                # Edge case: need at least 2 operands on stack
+                if self.size() < 2:
+                    raise ValueError(f"Malformed expression: insufficient operands for operator '{token}'")
+                
+                # Pop operands
+                operand2 = self.pop()  # top of stack
+                operand1 = self.pop()
+                
+                # Perform the operation
+                if token == '+':
+                    result = operand1 + operand2
+                elif token == '-':
+                    result = operand1 - operand2
+                elif token == '*':
+                    result = operand1 * operand2
+                elif token == '/':
+                    # Edge case: Division by zero
+                    if operand2 == 0:
+                        raise ZeroDivisionError("Division by zero")
+                    result = int(operand1 / operand2)
+                
+                # Push result back to stack
+                self.push(result)
+            else:
+                # Token should be an number
+                try:
+                    # Edge case: negative numbers
+                    # Edge case: very large numbers
+                    operand = int(token)
+                    self.push(operand)
+                except ValueError:
+                    # Edge case: invalid token (no  number or operator)
+                    raise ValueError(f"Invalid token: '{token}' is not a valid number or operator")
+        
+        # Edge case: malformed expression -> too many operands
+        if self.size() != 1:
+            raise ValueError(f"Malformed expression: {self.size()} values left on stack (expected 1)")
+        
+        return self.pop()
 
 
 # Main Function. Do not edit the code below
