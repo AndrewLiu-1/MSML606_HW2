@@ -99,7 +99,32 @@ class HomeWork2:
     # treat parentheses as individual elements in the returned list (see output)
 
     def infixNotationPrint(self, head: TreeNode) -> list:
-        pass
+        result = []
+        operators = {'+', '-', '*', '/'}
+        
+        def inorder(node):
+            # Checks again for best case: if node is None, return
+            if node is None:
+                return
+            
+            # Check if current node is an operator (internal node)
+            is_operator = node.val in operators
+            
+            # Addsa opening parenthesis for operator nodes
+            if is_operator:
+                result.append('(')
+            
+            # In-order: Left -> Root -> Right
+            inorder(node.left)        # Traverse left subtree
+            result.append(node.val)   # Visit root
+            inorder(node.right)       # Traverse right subtree
+            
+            # Add closing parenthesis for operator nodes
+            if is_operator:
+                result.append(')')
+        
+        inorder(head)
+        return result
 
 
     # Problem 2.3: Use post-order traversal (left, right, root) to generate postfix notation.
